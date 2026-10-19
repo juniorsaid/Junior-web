@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en" data-require-login="false">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Junior is a web developer from Tanzania. I build responsive, professional websites for restaurants, salons, hotels, shops and small businesses. Landing pages, business websites, redesigns and frontend fixes.">
+  <meta name="theme-color" content="#0a0c10">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Junior's Portfolio | Web Developer in Tanzania">
+  <meta property="og:description" content="Responsive, professional websites for businesses, brands and freelancers. See my projects, indicative prices and contact me on WhatsApp.">
+  <meta name="twitter:card" content="summary">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Syne:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+  <script>
+    try{
+      var jrTheme = JSON.parse(localStorage.getItem('jr_hue'));
+      var jrWhite = jrTheme && jrTheme.name === 'White';
+      if(typeof jrTheme === 'number') document.documentElement.style.setProperty('--hue', jrTheme);
+      else if(jrTheme && typeof jrTheme.hue === 'number') document.documentElement.style.setProperty('--hue', jrTheme.hue);
+      if(jrTheme && jrTheme.name === 'Custom'){
+        var jrC = document.documentElement.style;
+        jrC.setProperty('--sat', jrTheme.sat + '%'); jrC.setProperty('--light', jrTheme.light + '%');
+        jrC.setProperty('--g1', jrTheme.g1 + '%'); jrC.setProperty('--g2', jrTheme.g2 + '%');
+      }
+      if(jrWhite){
+        var jrS = document.documentElement.style;
+        jrS.setProperty('--sat', '0%'); jrS.setProperty('--light', '92%');
+        jrS.setProperty('--g1', '78%'); jrS.setProperty('--g2', '97%');
+      }
+      var jrNeedLogin = document.documentElement.getAttribute('data-require-login') === 'true';
+      if(!localStorage.getItem('jr_session') && !sessionStorage.getItem('jr_session')){
+        document.documentElement.classList.add('guest');
+        if(jrNeedLogin) document.documentElement.classList.add('gated');
+      }
+    }catch(e){
+      document.documentElement.classList.add('guest');
+      if(document.documentElement.getAttribute('data-require-login') === 'true') document.documentElement.classList.add('gated');
+    }
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <title>Junior's Portfolio</title>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header class="header" id="header">
+    <nav class="nav container">
+      <a href="#home" class="nav__logo">Junior&rsquo;s Portfolio</a>
+
+      <div class="nav__menu" id="nav-menu">
+        <button type="button" class="nav__account" id="account-btn" aria-label="Open account">
+          <span class="nav__avatar" id="account-avatar"><i class="ri-user-3-line"></i></span>
+
+          <span class="nav__account-text">
+            <strong class="nav__account-name" id="account-name">Login/SignUp</strong>
+            <small class="nav__account-sub" id="account-sub">Create an account to get started</small>
+          </span>
+
+          <i class="ri-arrow-right-s-line nav__account-arrow"></i>
+        </button>
+
+        <ul class="nav__list">
+          <li>
+            <a href="#home" class="nav__link active-link">
+              <i class="ri-home-5-line nav__icon"></i>
+              <span>Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#about" class="nav__link">
+              <i class="ri-user-smile-line nav__icon"></i>
+              <span>About</span>
+            </a>
+          </li>
+          <li>
+            <a href="#services" class="nav__link">
+              <i class="ri-customer-service-2-line nav__icon"></i>
+              <span>Services</span>
+            </a>
+          </li>
+          <li>
+            <a href="#pricing" class="nav__link">
+              <i class="ri-price-tag-3-line nav__icon"></i>
+              <span>Pricing</span>
+            </a>
+          </li>
+          <li>
+            <a href="#work" class="nav__link">
+              <i class="ri-briefcase-4-line nav__icon"></i>
+              <span>Projects</span>
+            </a>
+          </li>
+          <li>
+            <a href="#skills" class="nav__link">
+              <i class="ri-code-s-slash-line nav__icon"></i>
+              <span>Skills</span>
+            </a>
+          </li>
+          <li class="nav__settings-item">
+            <button type="button" class="nav__link nav__settings" data-open-settings>
+              <i class="ri-settings-3-line nav__icon"></i>
+              <span>Settings</span>
+            </button>
+          </li>
+
+          <li>
+            <a href="#contact" class="nav__contact">
+              <i class="ri-mail-send-line nav__icon"></i>
+              <span>Contact</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="nav__actions">
+        <button type="button" class="nav__login" data-open-auth="login">
+          <i class="ri-user-3-line"></i>
+          <span>Login/SignUp</span>
+        </button>
+
+        <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+          <i class="ri-menu-line"></i>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <section class="welcome" id="welcome">
+    <div class="blob-big"></div>
+    <div class="blob-big"></div>
+
+    <div class="welcome__container">
+      <span class="welcome__badge">Junior &middot; Web Developer from Tanzania</span>
+
+      <h2 class="welcome__title">WELCOME TO <span>JENGA NASI</span></h2>
+
+      <p class="welcome__text">
+        I'm glad you're here. This is where I share my work, my services and my skills.
+        Create a free account to unlock the full website, save your profile and get in
+        touch with me directly.
+      </p>
+
+      <div class="welcome__actions">
+        <button type="button" class="button" data-open-auth="login">
+          <span>Login</span>
+          <i class="ri-arrow-right-line"></i>
+        </button>
+
+        <button type="button" class="welcome__ghost" data-open-auth="signup">
+          Create account
+        </button>
+      </div>
+
+      <p class="welcome__note">It only takes a few seconds, and your account is saved on this device.</p>
+    </div>
+
+    <div class="welcome__bottom">
+      <p class="welcome__end">Thank you for visiting. Let's build something great together.</p>
+      <small class="footer__copy">&#169; All Rights By Mr.junior</small>
+    </div>
+  </section>
+
+  <main class="main" id="main-content">
+    <div class="cursor"></div>
+
+    <!-- ===================== HOME ===================== -->
+    <section class="home section" id="home" aria-label="Introduction">
+      <div class="blob-small"></div>
+      <div class="blob-small"></div>
+
+      <div class="home__container container grid">
+        <div class="home__data">
+          <h1 class="home__title">
+            I Build Modern Websites That <span>Help Businesses Grow.</span>
+          </h1>
+
+          <p class="home__description">
+            I create responsive, professional websites that help businesses showcase their services,
+            connect with customers, and build a stronger online presence.
+          </p>
+
+          <p class="home__typed-line">
+            I build: <span id="home-typed">Landing pages</span>
+          </p>
+        </div>
+
+        <div class="home__images">
+          <div class="home__box-1"></div>
+          <div class="home__box-2"></div>
+          <div class="home__box-3"></div>
+
+          <img src="rel.png" alt="Portrait of Junior, web developer from Tanzania" class="home__img" fetchpriority="high" decoding="async">
+
+          <div class="home__circle">
+            <span class="home__text" id="home-text" aria-hidden="true">EXPLORE - MORE - LET'S -</span>
+
+            <a href="#about" class="home__arrow" aria-label="Scroll to the About section">
+              <i class="ri-arrow-down-line"></i>
+            </a>
+          </div>
+
+          <div class="blob-big"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="home__cta">
+      <a href="#work" class="home__ghost">
+        <span>View My Work</span>
+      </a>
+    </div>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section class="about section" id="about" aria-labelledby="about-title">
+      <div class="about__container container grid">
+        <h2 class="about__title" id="about-title">
+          I&rsquo;m Junior, a web developer who builds <span>responsive</span> websites for <span>small businesses</span> and brands.
+        </h2>
+
+        <div class="about__info">
+          <p class="about__description">
+            I design and build frontend websites with HTML, CSS and JavaScript. Many small businesses
+            in Tanzania are still hard to find online, or have a website that is slow, confusing or
+            difficult to use on a phone. I help fix that with clear, mobile-friendly websites that
+            explain what you offer and make it easy for customers to contact you.
+          </p>
+
+          <ul class="about__points">
+            <li><i class="ri-smartphone-line"></i> <span>Websites that work on phones, tablets and computers.</span></li>
+            <li><i class="ri-chat-3-line"></i> <span>Clear communication from the first message to delivery.</span></li>
+            <li><i class="ri-check-line"></i> <span>I deliver the work we agree on, in the scope we agree on.</span></li>
+            <li><i class="ri-whatsapp-line"></i> <span>Easy to reach on WhatsApp.</span></li>
+          </ul>
+
+          <a href="#contact" class="about__button button">
+            <span>Contact me</span>
+            <i class="ri-arrow-right-line"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SERVICES ===================== -->
+    <section class="services section" id="services" aria-labelledby="services-title">
+      <h2 class="section__title" id="services-title">
+        <span>My</span> Services
+      </h2>
+
+      <div class="services__container container grid">
+        <article class="services__card services-open">
+          <button class="services__button" type="button">
+            <i class="ri-layout-top-line services__icon"></i>
+            <h3 class="services__name">Landing Page Development</h3>
+
+            <div class="services__arrow">
+              <i class="ri-arrow-down-s-line"></i>
+            </div>
+          </button>
+
+          <div class="services__data">
+            <p class="services__description">
+              A focused single page for promoting a product, service, event or business.
+            </p>
+
+            <ul class="services__list">
+              <li class="services__item">Clear message</li>
+              <li class="services__item">Call-to-action buttons</li>
+              <li class="services__item">Mobile-friendly</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="services__card services-close">
+          <button class="services__button" type="button">
+            <i class="ri-store-2-line services__icon"></i>
+            <h3 class="services__name">Business Website Development</h3>
+
+            <div class="services__arrow">
+              <i class="ri-arrow-down-s-line"></i>
+            </div>
+          </button>
+
+          <div class="services__data">
+            <p class="services__description">
+              A responsive website that presents your business, your services, your contact information and other important details.
+            </p>
+
+            <ul class="services__list">
+              <li class="services__item">Several pages</li>
+              <li class="services__item">Contact details</li>
+              <li class="services__item">Responsive layout</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="services__card services-close">
+          <button class="services__button" type="button">
+            <i class="ri-smartphone-line services__icon"></i>
+            <h3 class="services__name">Responsive Website Design</h3>
+
+            <div class="services__arrow">
+              <i class="ri-arrow-down-s-line"></i>
+            </div>
+          </button>
+
+          <div class="services__data">
+            <p class="services__description">
+              I improve website layouts so they work properly on mobile phones, tablets and desktops.
+            </p>
+
+            <ul class="services__list">
+              <li class="services__item">Mobile layouts</li>
+              <li class="services__item">Tablet layouts</li>
+              <li class="services__item">Desktop layouts</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="services__card services-close">
+          <button class="services__button" type="button">
+            <i class="ri-brush-line services__icon"></i>
+            <h3 class="services__name">Website Redesign</h3>
+
+            <div class="services__arrow">
+              <i class="ri-arrow-down-s-line"></i>
+            </div>
+          </button>
+
+          <div class="services__data">
+            <p class="services__description">
+              I improve the layout, usability, visual appearance and mobile experience of an existing frontend website.
+            </p>
+
+            <ul class="services__list">
+              <li class="services__item">Layout</li>
+              <li class="services__item">Usability</li>
+              <li class="services__item">Visual style</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="services__card services-close">
+          <button class="services__button" type="button">
+            <i class="ri-tools-line services__icon"></i>
+            <h3 class="services__name">Maintenance &amp; Frontend Fixes</h3>
+
+            <div class="services__arrow">
+              <i class="ri-arrow-down-s-line"></i>
+            </div>
+          </button>
+
+          <div class="services__data">
+            <p class="services__description">
+              I fix eligible HTML, CSS and JavaScript issues and make agreed frontend improvements to your website.
+            </p>
+
+            <ul class="services__list">
+              <li class="services__item">HTML fixes</li>
+              <li class="services__item">CSS fixes</li>
+              <li class="services__item">JavaScript fixes</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="services__card services-close">
+          <button class="services__button" type="button">
+            <i class="ri-seo-line services__icon"></i>
+            <h3 class="services__name">Basic On-Page SEO</h3>
+
+            <div class="services__arrow">
+              <i class="ri-arrow-down-s-line"></i>
+            </div>
+          </button>
+
+          <div class="services__data">
+            <p class="services__description">
+              I add page titles, meta descriptions, semantic HTML and other basic SEO improvements where relevant. I do not promise search rankings.
+            </p>
+
+            <ul class="services__list">
+              <li class="services__item">Page titles</li>
+              <li class="services__item">Meta descriptions</li>
+              <li class="services__item">Semantic HTML</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== PRICING =====================
+         To change a price or a package name, edit the text inside
+         .price__name and .price__amount. The WhatsApp message updates by itself. -->
+    <section class="pricing section" id="pricing" aria-labelledby="pricing-title">
+      <h2 class="section__title" id="pricing-title">
+        Indicative <span>Packages</span>
+      </h2>
+
+      <p class="pricing__intro">
+        Starting prices. The final price depends on the scope, features, content and requirements we agree on.
+      </p>
+
+      <div class="pricing__container container grid">
+        <article class="price">
+          <h3 class="price__name">Starter Landing Page</h3>
+          <p class="price__label">Starting price</p>
+          <p class="price__amount">$20&ndash;$35</p>
+
+          <ul class="price__list">
+            <li><i class="ri-check-line"></i> One focused page</li>
+            <li><i class="ri-check-line"></i> Responsive layout</li>
+            <li><i class="ri-check-line"></i> WhatsApp / contact button</li>
+            <li><i class="ri-check-line"></i> Basic on-page SEO</li>
+            <li><i class="ri-check-line"></i> Agreed revision rounds</li>
+            <li><i class="ri-check-line"></i> Deployment help (static sites)</li>
+          </ul>
+
+          <a href="https://wa.me/255725484857" data-wa="package" target="_blank" rel="noopener noreferrer" class="button price__button">
+            <i class="ri-whatsapp-line"></i>
+            <span>Get a Quote</span>
+          </a>
+        </article>
+
+        <article class="price">
+          <h3 class="price__name">Business Website</h3>
+          <p class="price__label">Starting price &middot; about 3&ndash;5 pages</p>
+          <p class="price__amount">$40&ndash;$50</p>
+
+          <ul class="price__list">
+            <li><i class="ri-check-line"></i> About 3&ndash;5 pages</li>
+            <li><i class="ri-check-line"></i> Responsive layout</li>
+            <li><i class="ri-check-line"></i> WhatsApp / contact button</li>
+            <li><i class="ri-check-line"></i> Basic on-page SEO</li>
+            <li><i class="ri-check-line"></i> Agreed revision rounds</li>
+            <li><i class="ri-check-line"></i> Deployment help (static sites)</li>
+          </ul>
+
+          <a href="https://wa.me/255725484857" data-wa="package" target="_blank" rel="noopener noreferrer" class="button price__button">
+            <i class="ri-whatsapp-line"></i>
+            <span>Get a Quote</span>
+          </a>
+        </article>
+
+        <article class="price">
+          <h3 class="price__name">Plus Website</h3>
+          <p class="price__label">Starting price &middot; about 5&ndash;7 pages</p>
+          <p class="price__amount">$50&ndash;$100</p>
+
+          <ul class="price__list">
+            <li><i class="ri-check-line"></i> About 5&ndash;7 pages</li>
+            <li><i class="ri-check-line"></i> Responsive layout</li>
+            <li><i class="ri-check-line"></i> WhatsApp / contact button</li>
+            <li><i class="ri-check-line"></i> Basic on-page SEO</li>
+            <li><i class="ri-check-line"></i> Agreed revision rounds</li>
+            <li><i class="ri-check-line"></i> Deployment help (static sites)</li>
+          </ul>
+
+          <a href="https://wa.me/255725484857" data-wa="package" target="_blank" rel="noopener noreferrer" class="button price__button">
+            <i class="ri-whatsapp-line"></i>
+            <span>Get a Quote</span>
+          </a>
+        </article>
+      </div>
+
+      <ul class="pricing__notes container">
+        <li><i class="ri-information-line"></i> Domain names, paid hosting, business email, advanced integrations and ongoing maintenance may cost extra.</li>
+        <li><i class="ri-information-line"></i> The number of revision rounds, features and delivery time are agreed before work starts.</li>
+        <li><i class="ri-information-line"></i> I start work after you approve the agreed requirements and pay the agreed deposit.</li>
+      </ul>
+    </section>
+
+    <!-- ===================== PROJECTS ===================== -->
+    <section class="work section" id="work" aria-labelledby="work-title">
+      <h2 class="section__title" id="work-title">
+        My <span>Projects</span>
+      </h2>
+
+      <div class="work__container container grid">
+        <div class="work__swiper swiper">
+          <div class="swiper-wrapper">
+            <!-- To add a live demo or source-code link to a project, add inside .work__links:
+                 <a href="YOUR-LINK" target="_blank" rel="noopener noreferrer" class="work__button">Live demo</a>
+                 <a href="YOUR-LINK" target="_blank" rel="noopener noreferrer" class="work__button">Source code</a> -->
+            <article class="work__card swiper-slide">
+              <div class="work__link">
+                <img src="build.png" alt="Preview of the AI chatbot project" class="work__img" loading="lazy" decoding="async">
+              </div>
+            
+              <div class="work__data">
+                <span class="work__badge">Demo project</span>
+                <h3 class="work__name">Restaurant Website</h3>
+                <p class="work__description">A restaurant website concept that shows how a food business can present itself online.</p>
+                <ul class="work__tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+            
+                <div class="work__links">
+                  <a href="https://LINK-YAKO-HAPA" target="_blank" rel="noopener noreferrer" class="work__button">Live demo</a>
+                </div>
+              </div>
+            
+              <div class="blob-big"></div>
+            </article>
+
+            <article class="work__card swiper-slide">
+              <div class="work__link">
+                <img src="bog.png" alt="Preview of the agriculture website project" class="work__img" loading="lazy" decoding="async">
+              </div>
+
+              <div class="work__data">
+                <span class="work__badge">Demo project</span>
+                <h3 class="work__name">Agriculture Website</h3>
+                <p class="work__description">A website concept for an agriculture-related business.</p>
+                <ul class="work__tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+                <div class="work__links">
+                  <a href="https://LINK-YAKO-HAPA" target="_blank" rel="noopener noreferrer" class="work__button">Live demo</a>
+                </div>
+              </div>
+
+              <div class="blob-big"></div>
+            </article>
+
+            <article class="work__card swiper-slide">
+              <div class="work__link">
+                <img src="me.png" alt="Preview of the chicken shop website project" class="work__img" loading="lazy" decoding="async">
+              </div>
+
+              <div class="work__data">
+                <span class="work__badge">Demo project</span>
+                <h3 class="work__name">Chicken Shop Website</h3>
+                <p class="work__description">A website concept for a chicken shop, showing products and how to contact the seller.</p>
+                <ul class="work__tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+                <div class="work__links">
+                  <a href="https://LINK-YAKO-HAPA" target="_blank" rel="noopener noreferrer" class="work__button">Live demo</a>
+                </div>
+              </div>
+
+              <div class="blob-big"></div>
+            </article>
+
+            <article class="work__card swiper-slide">
+              <div class="work__link">
+                <img src="non.png" alt="Preview of the mining-related website project" class="work__img" loading="lazy" decoding="async">
+              </div>
+
+              <div class="work__data">
+                <span class="work__badge">Practice project</span>
+                <h3 class="work__name">Mining-related Website</h3>
+                <p class="work__description">A frontend practice project for a mining-related business. Frontend design only.</p>
+                <ul class="work__tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+                <div class="work__links">
+                  <a href="https://LINK-YAKO-HAPA" target="_blank" rel="noopener noreferrer" class="work__button">Live demo</a>
+                </div>
+              </div>
+
+              <div class="blob-big"></div>
+            </article>
+
+            <article class="work__card swiper-slide">
+              <div class="work__link">
+                <img src="lulu.png" alt="Preview of the medicine-related website project" class="work__img" loading="lazy" decoding="async">
+              </div>
+
+              <div class="work__data">
+                <span class="work__badge">Practice project</span>
+                <h3 class="work__name">Medicine-related Website</h3>
+                <p class="work__description">A frontend practice project for a medicine-related business. Information pages only.</p>
+                <ul class="work__tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+                <div class="work__links">
+                  <a href="https://LINK-YAKO-HAPA" target="_blank" rel="noopener noreferrer" class="work__button">Live demo</a>
+                </div>
+              </div>
+
+              <div class="blob-big"></div>
+            </article>
+          </div>
+
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HOW I WORK ===================== -->
+    <section class="process section" id="process" aria-labelledby="process-title">
+      <h2 class="section__title" id="process-title">
+        How I <span>Work</span>
+      </h2>
+
+      <ol class="process__container container grid">
+        <li class="process__step">
+          <span class="process__number"></span>
+          <i class="ri-chat-3-line process__icon"></i>
+          <h3 class="process__name">Discuss</h3>
+          <p class="process__text">We talk about your business and your goals.</p>
+        </li>
+
+        <li class="process__step">
+          <span class="process__number"></span>
+          <i class="ri-file-list-3-line process__icon"></i>
+          <h3 class="process__name">Agree</h3>
+          <p class="process__text">We agree on the project scope, the price and the timeline.</p>
+        </li>
+
+        <li class="process__step">
+          <span class="process__number"></span>
+          <i class="ri-code-box-line process__icon"></i>
+          <h3 class="process__name">Design &amp; build</h3>
+          <p class="process__text">I design and develop your website.</p>
+        </li>
+
+        <li class="process__step">
+          <span class="process__number"></span>
+          <i class="ri-rocket-line process__icon"></i>
+          <h3 class="process__name">Review &amp; launch</h3>
+          <p class="process__text">You review it, I make the agreed revisions, and we deploy the website.</p>
+        </li>
+      </ol>
+
+      <p class="process__note container">
+        I start work after you approve the agreed requirements and pay the agreed deposit.
+      </p>
+    </section>
+
+    <section class="testimonials section">
+      <h2 class="section__title">
+        <span>What</span> They Say
+      </h2>
+
+      <div class="testimonials__container container grid">
+        <div class="testimonials__content">
+          <article class="testimonials__card">
+            <div class="testimonials__rating">
+              <span class="testimonials__number">5.0</span>
+
+              <div class="testimonials__stars">
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+              </div>
+            </div>
+
+            <blockquote class="testimonials__description">
+              "This young man is very disciplined; He is always in contact and active regarding time."
+            </blockquote>
+
+            <div class="testimonials__profile">
+              <img src="lulu.png" alt="" class="testimonials__img">
+              <cite class="testimonials__name">Junior</cite>
+            </div>
+
+            <div class="blob-big"></div>
+          </article>
+
+          <article class="testimonials__card">
+            <div class="testimonials__rating">
+              <span class="testimonials__number">5.0</span>
+
+              <div class="testimonials__stars">
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+              </div>
+            </div>
+
+            <blockquote class="testimonials__description">
+              "This young man is very disciplined; He is always in contact and active regarding time."
+            </blockquote>
+
+            <div class="testimonials__profile">
+              <img src="prof.png" alt="" class="testimonials__img">
+              <cite class="testimonials__name">Junior</cite>
+            </div>
+
+            <div class="blob-big"></div>
+          </article>
+
+          <article class="testimonials__card">
+            <div class="testimonials__rating">
+              <span class="testimonials__number">5.0</span>
+
+              <div class="testimonials__stars">
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+              </div>
+            </div>
+
+            <blockquote class="testimonials__description">
+              "This young man is very disciplined; He is always in contact and active regarding time."
+            </blockquote>
+
+            <div class="testimonials__profile">
+              <img src="profile.png" alt="" class="testimonials__img">
+              <cite class="testimonials__name">Junior</cite>
+            </div>
+
+            <div class="blob-big"></div>
+          </article>
+
+          <article class="testimonials__card">
+            <div class="testimonials__rating">
+              <span class="testimonials__number">5.0</span>
+
+              <div class="testimonials__stars">
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+              </div>
+            </div>
+
+            <blockquote class="testimonials__description">
+              "This young man is very disciplined; He is always in contact and active regarding time."
+            </blockquote>
+
+            <div class="testimonials__profile">
+              <img src="profile.png" alt="" class="testimonials__img">
+              <cite class="testimonials__name">Junior</cite>
+            </div>
+
+            <div class="blob-big"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SKILLS ===================== -->
+    <section class="skills section" id="skills">
+      <h2 class="section__title">
+        My <span>Skills</span>
+      </h2>
+
+      <p class="skills__description">
+        My skills are those I've learned and developed over the years. By studying, focusing, and being consistent in what I love most.
+      </p>
+
+      <div class="skills__container container grid">
+        <article class="skills__card">
+          <div class="skills__profession">
+            <i class="ri-layout-3-line skills__icon"></i>
+            <h2 class="skills__title">Frontend</h2>
+          </div>
+
+          <ul class="skills__list">
+            <li class="skills__item">
+              <img src="html5.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">HTML</span>
+            </li> 
+
+            <li class="skills__item">
+              <img src="css_old.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">CSS</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="javascript.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Javascript</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="c-plusplus.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">C-Plus</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="c.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">C</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="google-analytics.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Analytics</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="python.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Python</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="linux.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Linux</span>
+            </li>
+          </ul>
+
+          <div class="blob-small"></div>
+        </article>
+
+        <article class="skills__card">
+          <div class="skills__profession">
+            <i class="ri-database-line skills__icon"></i>
+            <h2 class="skills__title">Backend</h2>
+          </div>
+
+          <ul class="skills__list">
+            <li class="skills__item">
+              <img src="laravel.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Laravel</span>
+            </li>   
+
+            <li class="skills__item">
+              <img src="postgresql.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">PostgreSQL</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="nodejs.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Node js</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="supabase.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Supabase</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="socketio-icon-light.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Socket.io</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="meta.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Meta</span>
+            </li>
+          </ul>
+
+          <div class="blob-small"></div>
+        </article>
+
+        <article class="skills__card">
+          <div class="skills__profession">
+            <i class="ri-pencil-ruler-2-line skills__icon"></i>
+            <h2 class="skills__title">Design</h2>
+          </div>
+
+          <ul class="skills__list">
+            <li class="skills__item">
+              <img src="figma.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Figma</span>
+            </li>   
+
+            <li class="skills__item">
+              <img src="blender.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Blender</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="after-effects.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">After Effects</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="photoshop.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Photoshop</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="illustrator.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Illustrator</span>
+            </li>
+
+            <li class="skills__item">
+              <img src="framer.svg" alt="Technical skills" class="skills__img">
+              <span class="skills__name">Framer</span>
+            </li>
+          </ul>
+
+          <div class="blob-small"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section class="contact section" id="contact" aria-labelledby="contact-title">
+      <h2 class="section__title" id="contact-title">
+        Let&rsquo;s Talk About <span>Your Website</span>
+      </h2>
+
+      <p class="contact__intro">
+        Tell me about your business idea and the website you need.
+      </p>
+
+      <div class="contact__container container grid">
+        <form action="" class="contact__form grid" id="contact-form">
+          <div class="contact__group">
+            <input type="text" id="name" name="user_name" required autocomplete="off" class="contact__input">
+            <label for="name" class="contact__label">Name</label>
+          </div>
+
+          <div class="contact__group">
+            <input type="email" id="email" name="user_email" required autocomplete="off" class="contact__input">
+            <label for="email" class="contact__label">Email</label>
+          </div>
+
+          <div class="contact__group">
+            <textarea name="user_message" id="message" required autocomplete="off" class="contact__input contact__area"></textarea>
+            <label for="message" class="contact__label">Message</label>
+          </div>
+
+          <button type="submit" class="contact__button button">
+            <span>Send Message</span>
+            <i class="ri-arrow-right-line"></i>
+          </button>
+
+          <p class="contact__message" id="contact-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="contact__content grid">
+          <a href="mailto:juniormgaya500@gmail.com" data-mail class="contact__link">
+            <div class="contact__info">
+              <i class="ri-mail-line contact__icon"></i>
+
+              <div class="contact__text">
+                <h3 class="contact__title">Email</h3>
+                <address class="contact__address">juniormgaya500@gmail.com</address>
+              </div>
+            </div>
+
+            <div class="contact__arrow">
+              <i class="ri-arrow-right-up-line"></i>
+            </div>
+          </a>
+
+          <a href="https://wa.me/255725484857" data-wa="general" target="_blank" rel="noopener noreferrer" class="contact__link">
+            <div class="contact__info">
+              <i class="ri-whatsapp-line contact__icon"></i>
+
+              <div class="contact__text">
+                <h3 class="contact__title">Phone / WhatsApp</h3>
+                <address class="contact__address">+255725484857</address>
+              </div>
+            </div>
+
+            <div class="contact__arrow">
+              <i class="ri-arrow-right-up-line"></i>
+            </div>
+          </a>
+
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Dar%20es%20Salaam%2C%20Tanzania" data-map target="_blank" rel="noopener noreferrer" class="contact__link">
+            <div class="contact__info">
+              <i class="ri-map-pin-line contact__icon"></i>
+
+              <div class="contact__text">
+                <h3 class="contact__title">Location</h3>
+                <address class="contact__address">Tanzania - Dar es Salaam</address>
+              </div>
+            </div>
+
+            <div class="contact__arrow">
+              <i class="ri-arrow-right-up-line"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__container container grid">
+      <div class="footer__intro">
+        <h2 class="footer__title">
+          Let&rsquo;s build a website that helps your business grow.
+        </h2>
+        <p class="footer__text">
+          Junior&rsquo;s Portfolio &mdash; responsive, professional websites for businesses, brands and freelancers in Tanzania and beyond.
+        </p>
+      </div>
+
+      <div class="footer__content">
+        <ul class="footer__links">
+          <li><a href="#about" class="footer__link">About</a></li>
+          <li><a href="#services" class="footer__link">Services</a></li>
+          <li><a href="#pricing" class="footer__link">Pricing</a></li>
+          <li><a href="#work" class="footer__link">Projects</a></li>
+          <li><a href="#skills" class="footer__link">Skills</a></li>
+          <li><a href="#contact" class="footer__link">Contact</a></li>
+        </ul>
+
+        <ul class="footer__social">
+          <li>
+            <a href="https://www.facebook.com/share/1CUCW3f2iw/" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Facebook">
+              <i class="ri-facebook-circle-line"></i>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://www.instagram.com/mr.junior900/" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Instagram">
+              <i class="ri-instagram-line"></i>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://www.linkedin.com/in/junior-said-044ab1412?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android/" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="LinkedIn">
+              <i class="ri-linkedin-box-line"></i>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://github.com/juniorsaid" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="GitHub">
+              <i class="ri-github-line"></i>
+            </a>
+          </li>
+        </ul>
+
+        <a href="https://wa.me/255725484857" data-wa="general" target="_blank" rel="noopener noreferrer" class="footer__whatsapp" id="whatsapp-order">
+          <i class="ri-whatsapp-line"></i>
+          <span>Order a Website on WhatsApp</span>
+        </a>
+      </div>
+    </div>
+
+    <small class="footer__copy">&#169; <span id="year">2026</span> Junior&rsquo;s Portfolio. All rights reserved.</small>
+    <div class="blob-big"></div>
+  </footer>
+
+  <a href="#" class="scrollup" id="scroll-up">
+    <i class="ri-arrow-up-line"></i>
+  </a>
+
+
+  <!-- ===================== LOGIN / SIGN UP (flip card) =====================
+       Front face = Login (and "Forgot password"), back face = Create account. -->
+  <div class="auth" id="auth" aria-hidden="true">
+    <div class="auth__overlay" data-auth-close></div>
+
+    <div class="auth__stage" role="dialog" aria-modal="true" aria-label="Login or create an account">
+      <p class="auth__note" id="auth-note" hidden></p>
+
+      <div class="auth__body">
+        <button type="button" class="auth__close" data-auth-close aria-label="Close">
+          <i class="ri-close-line"></i>
+        </button>
+
+        <div class="auth__flip" id="auth-flip">
+
+          <!-- ============ FRONT: LOGIN + RESET PASSWORD ============ -->
+          <section class="auth__face" id="face-login">
+
+            <!-- Login -->
+            <div class="auth__view" data-view="login">
+              <div class="auth__logo"><i class="ri-lock-fill"></i></div>
+              <h3 class="auth__title">Welcome</h3>
+              <p class="auth__sub">Login to continue your journey</p>
+
+              <form class="auth__form" id="login-form" novalidate>
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="email" id="login-email" name="email" placeholder=" " autocomplete="email">
+                  <label for="login-email">Email Address</label>
+                </div>
+
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="password" id="login-password" name="password" placeholder=" " autocomplete="current-password">
+                  <label for="login-password">Password</label>
+                  <button type="button" class="auth__eye" data-toggle="login-password" aria-label="Show password" aria-pressed="false">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                </div>
+
+                <div class="auth__options">
+                  <label class="auth__check">
+                    <input type="checkbox" name="remember" id="login-remember">
+                    <span>Remember me</span>
+                  </label>
+                  <button type="button" class="auth__link" data-switch="reset">Forgot password?</button>
+                </div>
+
+                <p class="auth__msg" role="alert"></p>
+
+                <button type="submit" class="auth__btn">Login</button>
+              </form>
+
+              <div class="auth__switch">
+                <span>Don't have an account?</span>
+                <button type="button" class="auth__circle" data-switch="signup" aria-label="Create an account">
+                  <i class="ri-add-line"></i>
+                </button>
+              </div>
+
+              <div class="auth__social">
+                <a href="mailto:juniormgaya500@gmail.com" aria-label="Email me on Gmail"><i class="ri-google-fill"></i></a>
+                <a href="https://www.facebook.com/share/1CUCW3f2iw/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
+                <a href="https://www.linkedin.com/in/junior-said-044ab1412?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="ri-linkedin-fill"></i></a>
+              </div>
+            </div>
+
+            <!-- Forgot password -->
+            <div class="auth__view" data-view="reset" hidden>
+              <div class="auth__logo auth__logo--small"><i class="ri-key-2-fill"></i></div>
+              <h3 class="auth__title">Reset password</h3>
+              <p class="auth__sub">Choose a new password for your account</p>
+
+              <form class="auth__form auth__form--tight" id="reset-form" novalidate>
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="email" id="reset-email" name="email" placeholder=" " autocomplete="email">
+                  <label for="reset-email">Email Address</label>
+                </div>
+
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="password" id="reset-password" name="password" placeholder=" " autocomplete="new-password">
+                  <label for="reset-password">New Password</label>
+                  <button type="button" class="auth__eye" data-toggle="reset-password,reset-confirm" aria-label="Show password" aria-pressed="false">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                </div>
+
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="password" id="reset-confirm" name="confirm" placeholder=" " autocomplete="new-password">
+                  <label for="reset-confirm">Confirm New Password</label>
+                </div>
+
+                <p class="auth__msg" role="alert"></p>
+
+                <button type="submit" class="auth__btn">RESET PASSWORD</button>
+              </form>
+
+              <div class="auth__switch">
+                <span>Remembered it?</span>
+                <button type="button" class="auth__circle" data-switch="login" aria-label="Back to login">
+                  <i class="ri-arrow-left-line"></i>
+                </button>
+              </div>
+
+              <p class="auth__hint">Accounts are saved on this device, so the reset works on this device only.</p>
+            </div>
+          </section>
+
+          <!-- ============ BACK: CREATE ACCOUNT ============ -->
+          <section class="auth__face auth__face--back" id="face-signup">
+            <div class="auth__view" data-view="signup">
+              <div class="auth__logo auth__logo--small"><i class="ri-user-fill"></i></div>
+              <h3 class="auth__title">Create Account</h3>
+              <p class="auth__sub">Start your journey with us</p>
+
+              <form class="auth__form auth__form--tight" id="signup-form" novalidate>
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="text" id="signup-name" name="name" placeholder=" " autocomplete="name">
+                  <label for="signup-name">Full Name</label>
+                </div>
+
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="email" id="signup-email" name="email" placeholder=" " autocomplete="email">
+                  <label for="signup-email">Email Address</label>
+                </div>
+
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="password" id="signup-password" name="password" placeholder=" " autocomplete="new-password">
+                  <label for="signup-password">Password</label>
+                  <button type="button" class="auth__eye" data-toggle="signup-password,signup-confirm" aria-label="Show password" aria-pressed="false">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                </div>
+
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="password" id="signup-confirm" name="confirm" placeholder=" " autocomplete="new-password">
+                  <label for="signup-confirm">Confirm Password</label>
+                </div>
+
+                <p class="auth__msg" role="alert"></p>
+
+                <button type="submit" class="auth__btn">CREATE ACCOUNT</button>
+              </form>
+
+              <div class="auth__switch">
+                <span>Already have an account?</span>
+                <button type="button" class="auth__circle" data-switch="login" aria-label="Back to login">
+                  <i class="ri-arrow-left-line"></i>
+                </button>
+              </div>
+
+              <div class="auth__social">
+                <a href="mailto:juniormgaya500@gmail.com" aria-label="Email me on Gmail"><i class="ri-google-fill"></i></a>
+                <a href="https://www.facebook.com/share/1CUCW3f2iw/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
+                <a href="https://www.linkedin.com/in/junior-said-044ab1412?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="ri-linkedin-fill"></i></a>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings" id="settings" aria-hidden="true">
+    <div class="settings__overlay" data-settings-close></div>
+
+    <div class="settings__card" role="dialog" aria-modal="true" aria-label="Settings">
+      <header class="settings__head">
+        <h3 class="settings__title"><i class="ri-settings-3-line"></i> Settings</h3>
+        <button type="button" class="settings__close" data-settings-close aria-label="Close settings">
+          <i class="ri-close-line"></i>
+        </button>
+      </header>
+
+      <div class="settings__body">
+        <nav class="settings__tabs" aria-label="Settings sections">
+          <button type="button" class="settings__tab active" data-tab="profile">
+            <i class="ri-user-3-line"></i><span>Profile</span>
+          </button>
+          <button type="button" class="settings__tab" data-tab="upgrade">
+            <i class="ri-vip-crown-2-line"></i><span>Upgrade</span>
+          </button>
+          <button type="button" class="settings__tab" data-tab="theme">
+            <i class="ri-palette-line"></i><span>Theme</span>
+          </button>
+        </nav>
+
+        <div class="settings__panels">
+          <!-- PROFILE -->
+          <div class="settings__panel" data-panel="profile">
+            <div class="sp__top">
+              <div class="sp__avatar-wrap">
+                <span class="sp__avatar" id="sp-avatar"></span>
+                <label class="sp__cam" for="sp-file" aria-label="Change profile picture">
+                  <i class="ri-camera-line"></i>
+                </label>
+                <input type="file" id="sp-file" accept="image/*" hidden>
+              </div>
+
+              <h3 class="sp__name" id="sp-name"></h3>
+              <span class="sp__badge" id="sp-badge">Free plan</span>
+
+              <div class="sp__photo-actions">
+                <label for="sp-file" class="sp__link">Change photo</label>
+                <button type="button" class="sp__link" id="sp-remove">Remove</button>
+              </div>
+              <p class="sp__msg" id="sp-msg" role="alert"></p>
+            </div>
+
+            <ul class="sp__list">
+              <li class="sp__row">
+                <i class="ri-user-line"></i>
+                <div><small>Full name</small><strong id="sp-fullname"></strong></div>
+              </li>
+              <li class="sp__row">
+                <i class="ri-mail-line"></i>
+                <div><small>Email</small><strong id="sp-email"></strong></div>
+              </li>
+              <li class="sp__row">
+                <i class="ri-vip-crown-2-line"></i>
+                <div><small>Plan</small><strong id="sp-plan">Free</strong></div>
+              </li>
+              <li class="sp__row">
+                <i class="ri-calendar-line"></i>
+                <div><small>Member since</small><strong id="sp-since"></strong></div>
+              </li>
+            </ul>
+
+            <button type="button" class="sp__logout" id="logout-btn">
+              <i class="ri-logout-box-r-line"></i>
+              <span>Logout</span>
+            </button>
+          </div>
+
+          <!-- UPGRADE -->
+          <div class="settings__panel" data-panel="upgrade" hidden>
+            <h3 class="sp__heading">Get Premium</h3>
+            <p class="sp__sub">Use everything without limits, including the new pages I add soon.</p>
+
+            <div class="plans">
+              <div class="plan">
+                <h4 class="plan__name">Free</h4>
+                <ul class="plan__list">
+                  <li><i class="ri-check-line"></i> Browse the website</li>
+                  <li><i class="ri-check-line"></i> Contact me</li>
+                  <li><i class="ri-check-line"></i> Save your profile</li>
+                </ul>
+                <span class="plan__current" id="plan-free-tag">Your current plan</span>
+              </div>
+
+              <div class="plan plan--premium">
+                <h4 class="plan__name"><i class="ri-vip-crown-2-line"></i> Premium</h4>
+                <ul class="plan__list">
+                  <li><i class="ri-check-line"></i> Unlimited access, no limits</li>
+                  <li><i class="ri-check-line"></i> Every new page I add</li>
+                  <li><i class="ri-check-line"></i> Priority support</li>
+                </ul>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="button plan__button" id="upgrade-link">
+                  <span>Upgrade now</span>
+                  <i class="ri-arrow-right-line"></i>
+                </a>
+              </div>
+            </div>
+
+            <p class="sp__sub plan__help">Tap "Upgrade now" to message me on WhatsApp and I will activate Premium for you.</p>
+          </div>
+
+          <!-- THEME -->
+          <div class="settings__panel" data-panel="theme" hidden>
+            <h3 class="sp__heading">Theme</h3>
+            <p class="sp__sub">Pick a color for the whole website.</p>
+
+            <div class="theme__grid" id="theme-grid"></div>
+
+            <button type="button" class="sp__link theme__reset" id="theme-reset">Reset to default</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollReveal.js/4.0.9/scrollreveal.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <script src="main.js"></script>
+</body>
+</html>
