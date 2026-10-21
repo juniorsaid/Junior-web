@@ -16,6 +16,12 @@ const EMAILJS_PUBLIC_KEY = 'etrdKzkCPBWP0mLCz'
 // Set it to false when everything works.
 const EMAILJS_DEBUG = true
 
+// Forgot password: the verification code is e-mailed with a SECOND EmailJS template.
+// Create it in your EmailJS dashboard (steps are in the chat) and paste its ID here, e.g. 'template_abc123'.
+// While this is empty, "Send code" shows "not set up yet" and nobody can reset a password.
+const EMAILJS_RESET_TEMPLATE_ID = ''
+const RESET_CODE_MINUTES = 10 // how long a code stays valid
+
 // Where you receive emails, and the email visitors write to
 const CONTACT_EMAIL = 'juniormgaya500@gmail.com'
 const EMAIL_SUBJECT = "Website inquiry from Junior's Portfolio"
@@ -58,6 +64,7 @@ navLink.forEach(n => n.addEventListener('click', () => setMenu(false)))
 const USERS_KEY = 'jr_users',
   SESSION_KEY = 'jr_session',
   REMEMBER_KEY = 'jr_remember',
+  RESET_KEY = 'jr_reset',
   HUE_KEY = 'jr_hue'
 
 const store = {
@@ -341,12 +348,21 @@ const lockScroll = () =>{
 const authFlip = document.getElementById('auth-flip'),
   faceLogin = document.getElementById('face-login'),
   faceSignup = document.getElementById('face-signup'),
-  resetForm = document.getElementById('reset-form'),
-  authForms = [loginForm, signupForm, resetForm]
+  resetEmailForm = document.getElementById('reset-email-form'), // forgot password, step 1: email
+  resetForm = document.getElementById('reset-form'),            // forgot password, step 2: code + new password
+  resetSub = document.getElementById('reset-sub'),
+  resendBtn = document.getElementById('reset-resend'),
+  changeBtn = document.getElementById('reset-change'),
+  haveCodeBtn = document.getElementById('reset-have'),
+  authForms = [loginForm, signupForm, resetEmailForm, resetForm]
 
-const EMAIL_RE = /^\S+@\S+\.\S+$/
+const EMAIL_RE = /^\S+@\S+\.\S+$/,
+  RESET_SUB_1 = resetSub.textContent,
+  RESET_MAX_TRIES = 5,
+  RESEND_SECONDS = 60
 
 const field = (form, name) => form.elements.namedItem(name)
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const setMsg = (form, text, ok = false) =>{
   const msg = form.querySelector('.auth__msg')
@@ -357,8 +373,23 @@ const setMsg = (form, text, ok = false) =>{
 const clearInvalid = (form) =>
   form.querySelectorAll('[aria-invalid]').forEach(i => i.removeAttribute('aria-invalid'))
 
+// The main button of each form remembers its own text, so it can go back to it after "Please wait..."
+authForms.forEach(f =>{
+  const btn = f.querySelector('.auth__btn')
+  btn.dataset.label = btn.textContent.trim()
+})
+
+const setBusy = (form, busy, text) =>{
+  const btn = form.querySelector('.auth__btn')
+  btn.disabled = busy
+  btn.classList.toggle('is-busy', busy)
+  btn.classList.remove('is-done')
+  btn.textContent = busy && text ? text : btn.dataset.label
+}
+
 // Shows the error under the form and puts the cursor in the field that needs fixing
 const fail = (form, text, input) =>{
+  setBusy(form, false)
   setMsg(form, text)
   if(input){
     input.setAttribute('aria-invalid', 'true')
@@ -366,13 +397,115 @@ const fail = (form, text, input) =>{
   }
 }
 
-const setBusy = (form, busy) =>{
-  form.querySelector('.auth__btn').disabled = busy
-}
+// Runs a submit handler; if anything unexpected breaks, the visitor sees a message instead of nothing
+const onSubmit = (form, task) =>
+  form.addEventListener('submit', async (e) =>{
+    e.preventDefault()
+    clearInvalid(form)
+    setMsg(form, '')
+    try{
+      await task()
+    }catch(error){
+      console.error('Auth error:', error)
+      fail(form, 'Something went wrong. Please try again.')
+    }
+  })
 
 auth.querySelectorAll('.auth__field input').forEach(input =>
   input.addEventListener('input', () => input.removeAttribute('aria-invalid')))
 
+/*---------- Forgot password: e-mail verification code ----------*/
+const getResetRecord = () => store.get(RESET_KEY, null)
+
+let resetEmail = '',
+  resendTimer = null
+
+const maskEmail = (email) =>{
+  const [name, domain] = email.split('@')
+  return name.slice(0, 2) + '***@' + domain
+}
+
+const randomCode = () =>{
+  const n = (window.crypto && crypto.getRandomValues)
+    ? crypto.getRandomValues(new Uint32Array(1))[0]
+    : Math.floor(Math.random() * 4294967296)
+  return String(n % 1000000).padStart(6, '0')
+}
+
+const stopResendTimer = () =>{
+  clearInterval(resendTimer)
+  resendTimer = null
+}
+
+// "Resend code" is locked for a minute after a code was sent
+const startResendTimer = () =>{
+  stopResendTimer()
+
+  const tick = () =>{
+    const rec = getResetRecord(),
+      left = rec && rec.email === resetEmail ? Math.ceil((rec.sent + RESEND_SECONDS * 1000 - Date.now()) / 1000) : 0
+
+    resendBtn.disabled = left > 0
+    resendBtn.textContent = left > 0 ? 'Resend code in ' + left + 's' : 'Resend code'
+    if(left <= 0) stopResendTimer()
+  }
+
+  tick()
+  if(resendBtn.disabled) resendTimer = setInterval(tick, 1000)
+}
+
+const showResetStep = (step) =>{
+  resetEmailForm.hidden = step !== 1
+  resetForm.hidden = step !== 2
+
+  resetSub.textContent = step === 1
+    ? RESET_SUB_1
+    : 'We sent a 6-digit code to ' + maskEmail(resetEmail) + '. Enter it with your new password.'
+
+  ;[resetEmailForm, resetForm].forEach(f =>{ setMsg(f, ''); clearInvalid(f) })
+
+  if(step === 2) startResendTimer()
+  else stopResendTimer()
+}
+
+// Creates a code, e-mails it to the visitor and keeps only a hash of it on this device.
+// Returns '' when the code was sent, or the error text to show.
+const sendResetCode = async (email) =>{
+  const user = getUsers().find(u => u.email === email)
+  if(!user) return 'There is no account with this email on this device.'
+
+  if(!window.emailjs || !EMAILJS_RESET_TEMPLATE_ID){
+    return 'Sending the code is not set up yet. Please contact me on WhatsApp.'
+  }
+
+  const old = getResetRecord()
+  if(old && old.email === email){
+    const left = Math.ceil((old.sent + RESEND_SECONDS * 1000 - Date.now()) / 1000)
+    if(left > 0) return 'Please wait ' + left + ' seconds before asking for a new code.'
+  }
+
+  const code = randomCode(),
+    salt = randomSalt(),
+    hash = await hashPassword(code, salt)
+
+  try{
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_RESET_TEMPLATE_ID,
+      { to_email: email, to_name: user.name, code, minutes: RESET_CODE_MINUTES }, EMAILJS_PUBLIC_KEY)
+  }catch(error){
+    console.error('EmailJS error:', error)
+    const details = EMAILJS_DEBUG && error ? ' (' + (error.status || '') + ' ' + (error.text || error.message || '') + ')' : ''
+    return 'Could not send the code. Check your internet and try again.' + details
+  }
+
+  store.set(RESET_KEY, {
+    email, salt, hash, tries: 0,
+    sent: Date.now(),
+    exp: Date.now() + RESET_CODE_MINUTES * 60000
+  })
+  return ''
+}
+
+/*---------- Views, open / close ----------*/
 // Show one of: 'login' (front), 'signup' (back of the card) or 'reset' (forgot password)
 const showView = (name, animate = true) =>{
   const back = name === 'signup'
@@ -393,6 +526,7 @@ const showView = (name, animate = true) =>{
   faceSignup.toggleAttribute('inert', !back)
 
   authForms.forEach(f =>{ setMsg(f, ''); clearInvalid(f) })
+  showResetStep(1)
 
   // "Remember me" fills in the email you used last time
   if(name === 'login'){
@@ -413,7 +547,10 @@ const hidePasswords = () =>{
   })
 }
 
+let authCleanTimer = null
+
 const openAuth = (view, note) =>{
+  clearTimeout(authCleanTimer)
   showView(view || 'login', false)
   authNote.hidden = !note
   authNote.textContent = note || ''
@@ -425,9 +562,16 @@ const openAuth = (view, note) =>{
 const closeAuth = () =>{
   auth.classList.remove('show-auth')
   auth.setAttribute('aria-hidden', 'true')
-  authForms.forEach(f =>{ f.reset(); setMsg(f, ''); clearInvalid(f) })
-  hidePasswords()
   lockScroll()
+
+  // clean the forms after the window has faded out
+  clearTimeout(authCleanTimer)
+  authCleanTimer = setTimeout(() =>{
+    authForms.forEach(f =>{ f.reset(); setMsg(f, ''); clearInvalid(f); setBusy(f, false) })
+    hidePasswords()
+    resetEmail = ''
+    showResetStep(1)
+  }, 400)
 }
 
 auth.querySelectorAll('[data-auth-close]').forEach(el => el.addEventListener('click', closeAuth))
@@ -453,14 +597,30 @@ auth.querySelectorAll('.auth__eye').forEach(btn =>
     btn.setAttribute('aria-pressed', String(show))
   }))
 
-// Reload so the whole website (animations, carousel) starts fresh for the logged-in user
-const enterSite = () => { window.location.reload() }
+/*---------- Success: message, close the window, enter the website ----------*/
+const enterSite = async (form, text) =>{
+  const btn = form.querySelector('.auth__btn')
+  btn.classList.remove('is-busy')
+  btn.classList.add('is-done')
+  btn.textContent = 'Success ✔️'
+  setMsg(form, text, true)
 
-signupForm.addEventListener('submit', async (e) =>{
-  e.preventDefault()
-  clearInvalid(signupForm)
-  setMsg(signupForm, '')
+  await wait(1300)
+  closeAuth()
 
+  // The welcome page (data-require-login="true") needs a fresh start; otherwise just update the page
+  if(htmlEl.classList.contains('gated')){
+    await wait(350)
+    window.location.reload()
+    return
+  }
+
+  htmlEl.classList.remove('guest')
+  refreshAccountUI()
+}
+
+/*---------- Sign up ----------*/
+onSubmit(signupForm, async () =>{
   const nameInput = field(signupForm, 'name'),
     emailInput = field(signupForm, 'email'),
     passInput = field(signupForm, 'password'),
@@ -479,26 +639,23 @@ signupForm.addEventListener('submit', async (e) =>{
     return fail(signupForm, 'This email already has an account. Please login.', emailInput)
   }
 
-  setBusy(signupForm, true)
-  try{
-    const salt = randomSalt()
-    users.push({ name, email, salt, hash: await hashPassword(password, salt), created: Date.now(), plan: 'free', avatar: '' })
+  setBusy(signupForm, true, 'Please wait…')
 
-    if(!store.set(USERS_KEY, users)){
-      return fail(signupForm, 'Could not save the account (browser storage is blocked).')
-    }
-    startSession(email, true)
-    enterSite()
-  }finally{
-    setBusy(signupForm, false)
+  const salt = randomSalt(),
+    [hash] = await Promise.all([hashPassword(password, salt), wait(600)])
+
+  users.push({ name, email, salt, hash, created: Date.now(), plan: 'free', avatar: '' })
+
+  if(!store.set(USERS_KEY, users)){
+    return fail(signupForm, 'Could not save the account (browser storage is blocked).')
   }
+
+  startSession(email, true)
+  await enterSite(signupForm, 'Account created ✔️ Welcome!')
 })
 
-loginForm.addEventListener('submit', async (e) =>{
-  e.preventDefault()
-  clearInvalid(loginForm)
-  setMsg(loginForm, '')
-
+/*---------- Login ----------*/
+onSubmit(loginForm, async () =>{
   const emailInput = field(loginForm, 'email'),
     passInput = field(loginForm, 'password'),
     email = emailInput.value.trim().toLowerCase(),
@@ -508,56 +665,126 @@ loginForm.addEventListener('submit', async (e) =>{
   if(!email) return fail(loginForm, 'Enter your email.', emailInput)
   if(!password) return fail(loginForm, 'Enter your password.', passInput)
 
-  setBusy(loginForm, true)
-  try{
-    const user = getUsers().find(u => u.email === email)
+  setBusy(loginForm, true, 'Please wait…')
 
-    if(!user || user.hash !== await hashPassword(password, user.salt)){
-      return fail(loginForm, 'Wrong email or password.', passInput)
-    }
+  const user = getUsers().find(u => u.email === email),
+    [ok] = await Promise.all([
+      user ? hashPassword(password, user.salt).then(hash => hash === user.hash) : false,
+      wait(600)
+    ])
 
-    startSession(email, remember)
-    enterSite()
-  }finally{
-    setBusy(loginForm, false)
-  }
+  if(!ok) return fail(loginForm, 'Wrong email or password.', passInput)
+
+  startSession(email, remember)
+  await enterSite(loginForm, 'Login successful ✔️')
 })
 
-// Forgot password. Accounts live only on this device, so the reset also works only on this device.
-resetForm.addEventListener('submit', async (e) =>{
-  e.preventDefault()
-  clearInvalid(resetForm)
+/*---------- Forgot password, step 1: send the code ----------*/
+onSubmit(resetEmailForm, async () =>{
+  const emailInput = field(resetEmailForm, 'email'),
+    email = emailInput.value.trim().toLowerCase()
+
+  if(!EMAIL_RE.test(email)) return fail(resetEmailForm, 'Please enter a valid email.', emailInput)
+
+  setBusy(resetEmailForm, true, 'Sending…')
+  const error = await sendResetCode(email)
+  if(error) return fail(resetEmailForm, error, emailInput)
+
+  setBusy(resetEmailForm, false)
+  resetEmail = email
+  showResetStep(2)
+  setMsg(resetForm, 'Code sent ✔️ Check your email (also the Spam folder).', true)
+  field(resetForm, 'code').focus()
+})
+
+// Already got a code (for example you left the page to read your email)? Continue from step 2.
+haveCodeBtn.addEventListener('click', () =>{
+  clearInvalid(resetEmailForm)
+  const emailInput = field(resetEmailForm, 'email'),
+    email = emailInput.value.trim().toLowerCase(),
+    rec = getResetRecord()
+
+  if(!EMAIL_RE.test(email)) return fail(resetEmailForm, 'Type your email first.', emailInput)
+  if(!rec || rec.email !== email || Date.now() > rec.exp){
+    return fail(resetEmailForm, 'There is no active code for this email. Tap SEND CODE to get one.', emailInput)
+  }
+
+  resetEmail = email
+  showResetStep(2)
+  field(resetForm, 'code').focus()
+})
+
+field(resetForm, 'code').addEventListener('input', (e) =>{
+  e.target.value = e.target.value.replace(/\D/g, '')
+})
+
+resendBtn.addEventListener('click', async () =>{
+  resendBtn.disabled = true
   setMsg(resetForm, '')
 
-  const emailInput = field(resetForm, 'email'),
+  try{
+    const error = await sendResetCode(resetEmail)
+    setMsg(resetForm, error || 'New code sent ✔️', !error)
+  }catch(error){
+    console.error('Auth error:', error)
+    setMsg(resetForm, 'Something went wrong. Please try again.')
+  }
+  startResendTimer()
+})
+
+changeBtn.addEventListener('click', () => showResetStep(1))
+
+/*---------- Forgot password, step 2: code + new password ----------*/
+onSubmit(resetForm, async () =>{
+  const codeInput = field(resetForm, 'code'),
     passInput = field(resetForm, 'password'),
     confirmInput = field(resetForm, 'confirm'),
-    email = emailInput.value.trim().toLowerCase(),
+    code = codeInput.value.trim(),
     password = passInput.value
 
-  if(!EMAIL_RE.test(email)) return fail(resetForm, 'Please enter a valid email.', emailInput)
-  if(!getUsers().some(u => u.email === email)){
-    return fail(resetForm, 'There is no account with this email on this device.', emailInput)
-  }
+  if(!/^\d{6}$/.test(code)) return fail(resetForm, 'Enter the 6-digit code from your email.', codeInput)
   if(password.length < 6) return fail(resetForm, 'Password must be at least 6 characters.', passInput)
   if(confirmInput.value !== password) return fail(resetForm, 'The two passwords do not match.', confirmInput)
 
-  setBusy(resetForm, true)
-  try{
-    const salt = randomSalt()
+  const rec = getResetRecord()
+  if(!rec || rec.email !== resetEmail) return fail(resetForm, 'Please ask for a code first. Tap "Resend code".')
 
-    if(!updateUser(email, { salt, hash: await hashPassword(password, salt) })){
-      return fail(resetForm, 'Could not save the new password (browser storage is blocked).')
+  if(Date.now() > rec.exp){
+    return fail(resetForm, 'This code has expired. Tap "Resend code" for a new one.', codeInput)
+  }
+
+  setBusy(resetForm, true, 'Checking…')
+
+  if(await hashPassword(code, rec.salt) !== rec.hash){
+    rec.tries += 1
+
+    if(rec.tries >= RESET_MAX_TRIES){
+      rec.exp = 0 // the code is dead, but the record stays so "Resend code" keeps its one-minute wait
+      store.set(RESET_KEY, rec)
+      return fail(resetForm, 'Too many wrong codes. Tap "Resend code" for a new one.', codeInput)
     }
 
-    resetForm.reset()
-    hidePasswords()
-    showView('login')
-    field(loginForm, 'email').value = email
-    setMsg(loginForm, 'Password changed. You can login now.', true)
-  }finally{
-    setBusy(resetForm, false)
+    store.set(RESET_KEY, rec)
+    return fail(resetForm, 'Wrong code. ' + (RESET_MAX_TRIES - rec.tries) + ' tries left.', codeInput)
   }
+
+  const salt = randomSalt()
+  if(!updateUser(resetEmail, { salt, hash: await hashPassword(password, salt) })){
+    return fail(resetForm, 'Could not save the new password (browser storage is blocked).')
+  }
+
+  store.remove(RESET_KEY)
+
+  const email = resetEmail
+  resetEmail = ''
+  resetForm.reset()
+  resetEmailForm.reset()
+  hidePasswords()
+  setBusy(resetForm, false)
+  showView('login')
+
+  field(loginForm, 'email').value = email
+  setMsg(loginForm, 'Password changed ✔️ You can login now.', true)
 })
 
 /*---------- Settings window (Profile / Upgrade / Theme) ----------*/
@@ -905,8 +1132,7 @@ const scrollActive = () => {
 }
 window.addEventListener('scroll', scrollActive)
 
-/*============== CUSTOM CURSOR (mouse only)
-==============*/
+/*=============== CUSTOM CURSOR (mouse only) ===============*/
 const cursor = document.querySelector('.cursor')
 
 if(cursor && window.matchMedia('(pointer: fine)').matches){

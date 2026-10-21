@@ -1280,7 +1280,8 @@ img{
 }
 
 .auth__note[hidden],
-.auth__view[hidden]{
+.auth__view[hidden],
+.auth__form[hidden]{
   display: none;
 }
 
@@ -1558,6 +1559,10 @@ img{
   font-size: var(--small-font-size);
 }
 
+.auth__options--end{
+  justify-content: flex-end;
+}
+
 .auth__check{
   display: inline-flex;
   align-items: center;
@@ -1614,6 +1619,12 @@ img{
   text-decoration: underline;
 }
 
+.auth__link:disabled{
+  opacity: 0.5;
+  text-decoration: none;
+  cursor: default;
+}
+
 /* Messages */
 .auth__msg{
   min-height: 1.1rem;
@@ -1625,6 +1636,7 @@ img{
 
 .auth__msg.ok{
   color: hsl(142, 70%, 60%);
+  font-weight: var(--font-semi-bold);
 }
 
 .auth__hint{
@@ -1637,6 +1649,9 @@ img{
 .auth__btn{
   position: relative;
   isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 3.4rem;
   border-radius: 1.1rem;
@@ -1667,8 +1682,38 @@ img{
 }
 
 .auth__btn:disabled{
-  opacity: 0.7;
   cursor: wait;
+}
+
+/* The color rises when the button is touched / pressed, and also while you are typing in the form */
+.auth__btn:active,
+.auth__btn:focus-visible,
+.auth__btn.is-busy,
+.auth__btn.is-done,
+.auth__form:focus-within .auth__btn{
+  color: var(--black-color);
+  box-shadow: 0 10px 25px hsla(var(--hue), var(--sat), 55%, 0.3);
+}
+
+.auth__btn:active::before,
+.auth__btn:focus-visible::before,
+.auth__btn.is-busy::before,
+.auth__btn.is-done::before,
+.auth__form:focus-within .auth__btn::before{
+  transform: translateY(0);
+  animation: auth-slide 1.5s linear infinite;
+}
+
+/* Small spinner while the button is working */
+.auth__btn.is-busy::after{
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.6rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: auth-spin 0.7s linear infinite;
 }
 
 /* Switch (flip) button + social buttons */

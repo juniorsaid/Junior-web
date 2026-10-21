@@ -1090,17 +1090,35 @@
               </div>
             </div>
 
-            <!-- Forgot password -->
+            <!-- Forgot password: step 1 = email, step 2 = code + new password -->
             <div class="auth__view" data-view="reset" hidden>
               <div class="auth__logo auth__logo--small"><i class="ri-key-2-fill"></i></div>
               <h3 class="auth__title">Reset password</h3>
-              <p class="auth__sub">Choose a new password for your account</p>
+              <p class="auth__sub" id="reset-sub">Enter your email and we will send you a verification code</p>
 
-              <form class="auth__form auth__form--tight" id="reset-form" novalidate>
+              <!-- Step 1 -->
+              <form class="auth__form auth__form--tight" id="reset-email-form" novalidate>
                 <div class="auth__field">
                   <span class="auth__glow"></span><span class="auth__ring"></span>
                   <input type="email" id="reset-email" name="email" placeholder=" " autocomplete="email">
                   <label for="reset-email">Email Address</label>
+                </div>
+
+                <p class="auth__msg" role="alert"></p>
+
+                <button type="submit" class="auth__btn">SEND CODE</button>
+
+                <div class="auth__options auth__options--end">
+                  <button type="button" class="auth__link" id="reset-have">I already have a code</button>
+                </div>
+              </form>
+
+              <!-- Step 2 -->
+              <form class="auth__form auth__form--tight" id="reset-form" novalidate hidden>
+                <div class="auth__field">
+                  <span class="auth__glow"></span><span class="auth__ring"></span>
+                  <input type="text" id="reset-code" name="code" placeholder=" " inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+                  <label for="reset-code">Verification Code</label>
                 </div>
 
                 <div class="auth__field">
@@ -1121,6 +1139,11 @@
                 <p class="auth__msg" role="alert"></p>
 
                 <button type="submit" class="auth__btn">RESET PASSWORD</button>
+
+                <div class="auth__options">
+                  <button type="button" class="auth__link" id="reset-resend">Resend code</button>
+                  <button type="button" class="auth__link" id="reset-change">Change email</button>
+                </div>
               </form>
 
               <div class="auth__switch">
@@ -1129,8 +1152,6 @@
                   <i class="ri-arrow-left-line"></i>
                 </button>
               </div>
-
-              <p class="auth__hint">Accounts are saved on this device, so the reset works on this device only.</p>
             </div>
           </section>
 
